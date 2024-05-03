@@ -1,0 +1,46 @@
+<% if flash[:notice].present? %>
+  <div class="alert alert-success">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<p class="h1 text-center">Bem vindo ao Banco do Lerinhas!</p>
+<%= link_to "new PEPLE", new_pessoa_path %>
+<div class="card text-bg-light m-5 justify-items" style="width: auto;">
+    <div class="card-body m-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Saldo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <% @pessoas.each do |pessoa|%>
+                <tbody>
+                    <tr>
+                        <td><%= pessoa.id %></td>
+                        <td><%= pessoa.nome %></td>
+                        <td><%= pessoa.cpf %></td>
+                        <td><%= pessoa.valor_da_carteira %></td>
+                        <td>
+                            <%= form_with url: transferencia_path do |form| %>
+                                <%= form.hidden_field :pessoa1_id, value: pessoa.id %>
+                                <%= form.text_field :pessoa2_cpf, placeholder: "Digite o CPF da pessoa", class: 'form-control', style:"font-size: 12px" %>
+                                <%= form.number_field :valor, placeholder: "Digite o valor da transferência", class: 'form-control', style: 'font-size: 12px;'%>
+                                <%= form.submit "Transferência", class:"btn btn-primary" %>
+                            <% end %>
+                        </td>
+                        <td>
+                            <%= link_to "Editar", edit_pessoa_path(pessoa), class:"btn btn-primary" %>
+                            <%= link_to "Deletar", pessoa_path(pessoa), data:{turbo_method: :delete,
+                                                                            turbo_confirm: "Tem Certeza?"}, class:"btn btn-danger" %>
+                        </td>
+                    </tr>
+                </tbody>
+            <% end %>
+        </table>
+    </div>
+</div>
